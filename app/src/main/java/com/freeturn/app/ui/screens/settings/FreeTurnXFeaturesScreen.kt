@@ -26,6 +26,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.freeturn.app.R
+import com.freeturn.app.freeturnx.socksclient.Socks5ClientCard
 import com.freeturn.app.ui.components.SettingsBackButton
 import com.freeturn.app.ui.components.SettingsContentMaxWidth
 import com.freeturn.app.ui.components.SettingsEntryRow
@@ -90,6 +91,7 @@ fun FreeTurnXFeaturesScreen(
                     enabled = shizukuTetherEnabled,
                     onEnabledChange = { settingsViewModel.setShizukuTetherEnabled(it) },
                 )
+                Socks5ClientCard()
             }
         }
     }

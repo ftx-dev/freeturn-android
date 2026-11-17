@@ -170,6 +170,20 @@
         </service>
 
         <!-- Shizuku: раздача точки доступа через VPN без root (см. tether/TetherUserService). -->
+        <!-- FreeTurnX: SOCKS5-клиент (freeturnx/socksclient) -->
+        <service
+            android:name=".freeturnx.socksclient.Socks5ClientService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Routes device traffic through a user-chosen SOCKS5 proxy on the local Wi-Fi network." />
+        </service>
+
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
             android:authorities="${applicationId}.shizuku"

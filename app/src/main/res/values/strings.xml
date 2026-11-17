@@ -423,6 +423,18 @@
     <string name="hotspot_proxy" translatable="false">SOCKS5 Hotspot</string>
     <string name="freeturnx_features">FreeTurnX: Фичи</string>
     <string name="freeturnx_features_desc">Собственные функции FreeTurnX</string>
+    <string name="fx_socks_client">SOCKS5-клиент</string>
+    <string name="fx_socks_client_desc">Подключить телефон к SOCKS5-прокси, например к раздаче FreeTurn по Wi-Fi</string>
+    <string name="fx_socks_client_hint">Подключитесь к Wi-Fi телефона, где в FreeTurn включён SOCKS5 Hotspot (с UDP). Адрес подставлен из шлюза Wi-Fi. Пока клиент работает, основной VPN отключён.</string>
+    <string name="fx_socks_client_host">Адрес</string>
+    <string name="fx_socks_client_port">Порт</string>
+    <string name="fx_socks_client_user">Логин (необязательно)</string>
+    <string name="fx_socks_client_pass">Пароль</string>
+    <string name="fx_socks_client_connect">Подключить</string>
+    <string name="fx_socks_client_disconnect">Отключить</string>
+    <string name="fx_socks_client_connecting">Подключение…</string>
+    <string name="fx_socks_client_connected">Подключено через %1$s</string>
+    <string name="fx_socks_client_failed">Не удалось: %1$s</string>
     <string name="shizuku_tether">Раздача через Shizuku</string>
     <string name="shizuku_tether_desc">Точка доступа раздаёт VPN, без root. Требуется приложение Shizuku</string>
     <string name="shizuku_tether_not_running">Запустите Shizuku</string>
