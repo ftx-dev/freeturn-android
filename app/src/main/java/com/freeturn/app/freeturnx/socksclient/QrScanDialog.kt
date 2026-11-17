@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -60,10 +59,9 @@ fun QrScanDialog(onResult: (Socks5ClientConfig) -> Unit, onDismiss: () -> Unit) 
         Surface(shape = MaterialTheme.shapes.extraLarge) {
             Column(Modifier.padding(Spacing.lg), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(R.string.fx_socks_client_scan_hint), style = MaterialTheme.typography.bodyMedium)
-                Box(Modifier.padding(vertical = Spacing.md).fillMaxWidth().aspectRatio(1f)) {
+                Box(Modifier.padding(top = Spacing.md).fillMaxWidth().aspectRatio(1f)) {
                     if (granted) CameraQr(onResult)
                 }
-                TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.cancel)) }
             }
         }
     }

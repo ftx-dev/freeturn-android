@@ -3,10 +3,10 @@ package com.freeturn.app.freeturnx.socksclient
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.Dialog
 import com.freeturn.app.R
 import com.freeturn.app.data.config.Socks5Config
 import com.freeturn.app.ui.components.QrCode
@@ -48,11 +49,15 @@ fun HotspotQrCard(loadConfig: suspend () -> Socks5Config) {
         value = withContext(Dispatchers.IO) { hotspotAddress() }
             ?.let { Socks5ClientConfig(it, cfg.port, cfg.user, cfg.pass).proxyUrl }.orEmpty()
     }
-    AlertDialog(
-        onDismissRequest = { open = false },
-        title = { Text(stringResource(R.string.fx_hotspot_qr)) },
-        text = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.md)) {
+    // Без кнопок: закрывается касанием вне окна или «Назад».
+    Dialog(onDismissRequest = { open = false }) {
+        Surface(shape = MaterialTheme.shapes.extraLarge) {
+            Column(
+                Modifier.padding(Spacing.lg),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(Spacing.md)
+            ) {
+                Text(stringResource(R.string.fx_hotspot_qr), style = MaterialTheme.typography.titleLarge)
                 when {
                     url == null -> Unit
                     url!!.isEmpty() -> Text(stringResource(R.string.fx_hotspot_qr_no_ap))
@@ -65,9 +70,8 @@ fun HotspotQrCard(loadConfig: suspend () -> Socks5Config) {
                     }
                 }
             }
-        },
-        confirmButton = { TextButton(onClick = { open = false }) { Text(stringResource(android.R.string.ok)) } }
-    )
+        }
+    }
 }
 
 /**

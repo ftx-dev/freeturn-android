@@ -148,7 +148,6 @@ private fun Socks5ClientDialog(state: Socks5ClientService.State, onConnect: () -
             if (!active) {
                 TextButton(onClick = { scanning = true }) { Text(stringResource(R.string.fx_socks_client_scan)) }
             }
-            TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.cancel)) }
         }
     )
 }
