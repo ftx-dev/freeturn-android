@@ -117,7 +117,7 @@ fun AboutScreen(onBack: () -> Unit) {
                             title = stringResource(R.string.tg_channel),
                             trailingRes = R.drawable.open_in_new_24px,
                             trailingTint = MaterialTheme.colorScheme.primary,
-                            onClick = { open("https://t.me/+qyxSKAvDKV1mZTYy") }
+                            onClick = { open("https://t.me/+ZVdbpZB0w_Q1MTdi") }
                         )
                     }
                 }
