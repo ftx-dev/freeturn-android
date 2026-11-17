@@ -35,6 +35,8 @@ import com.freeturn.app.domain.proxy.Socks5Server
 import com.freeturn.app.domain.proxy.TunHandle
 import com.freeturn.app.ui.screens.captcha.AutomaticCaptchaWebViewHostController
 import com.freeturn.app.tether.ShizukuTether
+import com.freeturn.app.freeturnx.lastExcludedSubnets
+import com.freeturn.app.freeturnx.protectServerSocket
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -337,6 +339,7 @@ class ProxyService : VpnService() {
             log = log,
             config = cfg,
             protectUdp = { socket -> protect(socket) },
+            onListen = { server -> log.add("FreeTurnX: ${protectServerSocket(server)}, мимо VPN: $lastExcludedSubnets") },
         ).also { it.start() }
     }
 
