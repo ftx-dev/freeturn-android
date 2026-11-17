@@ -427,12 +427,12 @@
     <string name="fx_socks_client_scan">Сканировать QR</string>
     <string name="fx_socks_client_scan_hint">Наведите камеру на QR SOCKS5 Hotspot на другом телефоне</string>
     <string name="fx_hotspot_qr">QR для SOCKS5 Hotspot</string>
-    <string name="fx_hotspot_qr_desc">Второй телефон сканирует его в SOCKS5-клиенте</string>
-    <string name="fx_hotspot_qr_no_ap">Не найден адрес точки доступа. Включите точку доступа и откройте снова.</string>
+    <string name="fx_hotspot_qr_desc">Для устройств в той же Wi-Fi сети, что и телефон</string>
+    <string name="fx_hotspot_qr_no_ap">Телефон не подключён к Wi-Fi. SOCKS5 Hotspot работает для устройств в той же Wi-Fi сети; для точки доступа телефона используйте «Раздачу через Shizuku».</string>
     <string name="fx_tile_hotspot">Hotspot под VPN</string>
     <string name="fx_socks_client">SOCKS5-клиент</string>
-    <string name="fx_socks_client_desc">Подключить телефон к SOCKS5-прокси, например к раздаче FreeTurn по Wi-Fi</string>
-    <string name="fx_socks_client_hint">Подключитесь к Wi-Fi телефона, где в FreeTurn включён SOCKS5 Hotspot (с UDP). Адрес подставлен из шлюза Wi-Fi. Пока клиент работает, основной VPN отключён.</string>
+    <string name="fx_socks_client_desc">Подключить телефон к SOCKS5-прокси, например к SOCKS5 Hotspot телефона в той же Wi-Fi сети</string>
+    <string name="fx_socks_client_hint">Для устройства в той же Wi-Fi сети, что и телефон с включённым SOCKS5 Hotspot: отсканируйте его QR или введите адрес. Если вы подключены к точке доступа телефона, используйте на нём «Раздачу через Shizuku» - SOCKS5 не нужен. Пока клиент работает, основной VPN отключён.</string>
     <string name="fx_socks_client_host">Адрес</string>
     <string name="fx_socks_client_port">Порт</string>
     <string name="fx_socks_client_user">Логин (необязательно)</string>

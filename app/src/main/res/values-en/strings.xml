@@ -397,12 +397,12 @@
     <string name="fx_socks_client_scan">Scan QR</string>
     <string name="fx_socks_client_scan_hint">Point the camera at the SOCKS5 Hotspot QR on another phone</string>
     <string name="fx_hotspot_qr">SOCKS5 Hotspot QR</string>
-    <string name="fx_hotspot_qr_desc">Scan it in the SOCKS5 client on another phone</string>
-    <string name="fx_hotspot_qr_no_ap">Hotspot address not found. Turn the hotspot on and open again.</string>
+    <string name="fx_hotspot_qr_desc">For devices on the same Wi-Fi network as this phone</string>
+    <string name="fx_hotspot_qr_no_ap">The phone is not on Wi-Fi. SOCKS5 Hotspot serves devices on the same Wi-Fi network; for the phone\'s own hotspot use Shizuku sharing.</string>
     <string name="fx_tile_hotspot">Hotspot via VPN</string>
     <string name="fx_socks_client">SOCKS5 client</string>
     <string name="fx_socks_client_desc">Route this phone through a SOCKS5 proxy, e.g. FreeTurn sharing over Wi-Fi</string>
-    <string name="fx_socks_client_hint">Join the Wi-Fi of a phone with SOCKS5 Hotspot (with UDP) enabled in FreeTurn. The address is prefilled from the Wi-Fi gateway. The main VPN is off while the client runs.</string>
+    <string name="fx_socks_client_hint">For a device on the same Wi-Fi network as the phone with SOCKS5 Hotspot on: scan its QR or enter the address. If you are on the phone\'s own hotspot, use Shizuku sharing on it instead - no SOCKS5 needed. The main VPN is off while the client runs.</string>
     <string name="fx_socks_client_host">Address</string>
     <string name="fx_socks_client_port">Port</string>
     <string name="fx_socks_client_user">Username (optional)</string>

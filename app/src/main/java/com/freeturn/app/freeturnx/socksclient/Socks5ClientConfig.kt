@@ -1,9 +1,6 @@
 package com.freeturn.app.freeturnx.socksclient
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import java.net.Inet4Address
 import java.net.URI
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -36,23 +33,11 @@ data class Socks5ClientConfig(
 
         fun load(context: Context): Socks5ClientConfig = prefs(context).let {
             Socks5ClientConfig(
-                host = it.getString(KEY_HOST, null) ?: wifiGateway(context).orEmpty(),
+                host = it.getString(KEY_HOST, null).orEmpty(),
                 port = it.getInt(KEY_PORT, DEFAULT_PORT),
                 user = it.getString(KEY_USER, "").orEmpty(),
                 pass = it.getString(KEY_PASS, "").orEmpty(),
             )
-        }
-
-        /** Шлюз текущего Wi-Fi: на точке доступа это и есть раздающий телефон. */
-        fun wifiGateway(context: Context): String? {
-            val cm = context.getSystemService(ConnectivityManager::class.java) ?: return null
-            @Suppress("DEPRECATION")
-            val wifi = cm.allNetworks.firstOrNull {
-                cm.getNetworkCapabilities(it)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
-            } ?: return null
-            return cm.getLinkProperties(wifi)?.routes
-                ?.firstOrNull { it.isDefaultRoute && it.gateway is Inet4Address }
-                ?.gateway?.hostAddress
         }
 
         /** Разбор `socks5://[логин:пароль@]адрес[:порт]` - так его отдаёт QR SOCKS5 Hotspot. null - не SOCKS5. */
