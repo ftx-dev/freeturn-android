@@ -21,4 +21,11 @@ interface ITetherService {
 
     /** Накопленный вывод helper'а (tun2socks) с прошлого вызова - для журнала приложения. */
     List<String> drainLog() = 3;
+
+    /**
+     * Kill switch: client - binder процесса приложения. Умерло приложение (а с ним VPN) -
+     * сервис сам выключает точку доступа и убирает тестовую сеть, чтобы раздача не ушла
+     * на мобильный интернет мимо VPN.
+     */
+    void watchClient(IBinder client) = 4;
 }

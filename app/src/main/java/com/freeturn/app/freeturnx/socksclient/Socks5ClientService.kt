@@ -15,9 +15,13 @@ import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
 import com.freeturn.app.R
+import com.freeturn.app.domain.proxy.ProxyPhase
+import com.freeturn.app.domain.proxy.ProxyStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.io.File
 import kotlin.concurrent.thread
 
@@ -27,7 +31,11 @@ import kotlin.concurrent.thread
  * TUN этого VPN отдаётся helper'у tun2socks (libtether.so, тот же, что у раздачи через Shizuku).
  * Сам helper - наш процесс, а приложение исключено из VPN, поэтому его соединения идут мимо туннеля.
  */
-class Socks5ClientService : VpnService() {
+class Socks5ClientService : VpnService(), KoinComponent {
+
+    // Состояние дублируется в общий ProxyStore: главный экран, тайл и виджет показывают
+    // SOCKS5-клиент как обычное подключение.
+    private val store: ProxyStore by inject()
 
     sealed interface State {
         data object Idle : State
@@ -47,10 +55,22 @@ class Socks5ClientService : VpnService() {
         }
         val config = Socks5ClientConfig.load(this)
         startForegroundCompat(config.address)
+        // VPN FreeTurn уже работает - SOCKS5-клиент не поднимаем (и наоборот, см. FreeTurnXLauncher).
+        if (_state.value !is State.Connected && store.status.value.busy) {
+            stopAll(State.Failed(getString(R.string.fx_socks_client_vpn_busy)), publish = false)
+            return START_NOT_STICKY
+        }
         _state.value = State.Connecting
+        store.starting()
         thread(name = "socks5-client-start") {
             val error = runCatching { start(config) }.getOrElse { it.message ?: it.javaClass.simpleName }
-            if (error != null) stopAll(State.Failed(error)) else _state.value = State.Connected(config.address)
+            if (error != null) {
+                stopAll(State.Failed(error))
+            } else {
+                _state.value = State.Connected(config.address)
+                store.setPhase(SESSION, ProxyPhase.Connected, active = 1, total = 1)
+                store.setTunnelUp(true)
+            }
         }
         return START_NOT_STICKY
     }
@@ -106,11 +126,15 @@ class Socks5ClientService : VpnService() {
         helper = null
     }
 
-    private fun stopAll(final: State) {
+    private fun stopAll(final: State, publish: Boolean = true) {
         stopHelper()
         runCatching { tun?.close() }
         tun = null
+        val wasOurs = _state.value is State.Connecting || _state.value is State.Connected
         _state.value = final
+        if (publish && wasOurs) {
+            if (final is State.Failed) store.fail(final.reason) else store.idle()
+        }
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
@@ -119,9 +143,7 @@ class Socks5ClientService : VpnService() {
     override fun onRevoke() = stopAll(State.Idle)
 
     override fun onDestroy() {
-        stopHelper()
-        runCatching { tun?.close() }
-        if (_state.value !is State.Failed) _state.value = State.Idle
+        if (_state.value is State.Connecting || _state.value is State.Connected) stopAll(State.Idle)
         super.onDestroy()
     }
 
@@ -155,6 +177,12 @@ class Socks5ClientService : VpnService() {
     companion object {
         private val _state = MutableStateFlow<State>(State.Idle)
         val state: StateFlow<State> = _state.asStateFlow()
+
+        val isActive: Boolean
+            get() = _state.value.let { it is State.Connecting || it is State.Connected }
+
+        /** Id сессии в ProxyStore: ядро FreeTurn нумерует свои с 1. */
+        private const val SESSION = -7301L
 
         fun start(context: Context) {
             context.startForegroundService(Intent(context, Socks5ClientService::class.java))

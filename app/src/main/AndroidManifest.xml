@@ -170,6 +170,28 @@
         </service>
 
         <!-- Shizuku: раздача точки доступа через VPN без root (см. tether/TetherUserService). -->
+        <!-- FreeTurnX: плитки шторки (freeturnx/tiles) -->
+        <service
+            android:name=".freeturnx.tiles.HotspotTileService"
+            android:exported="true"
+            android:icon="@drawable/wifi_tethering_24px"
+            android:label="@string/fx_tile_hotspot"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".freeturnx.tiles.Socks5TileService"
+            android:exported="true"
+            android:icon="@drawable/wifi_tethering_24px"
+            android:label="@string/fx_socks_client"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <!-- FreeTurnX: SOCKS5-клиент (freeturnx/socksclient) -->
         <service
             android:name=".freeturnx.socksclient.Socks5ClientService"

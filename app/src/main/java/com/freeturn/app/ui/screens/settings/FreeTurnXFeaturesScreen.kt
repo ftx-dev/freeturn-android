@@ -26,6 +26,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.freeturn.app.R
+import com.freeturn.app.freeturnx.socksclient.HotspotQrCard
 import com.freeturn.app.freeturnx.socksclient.Socks5ClientCard
 import com.freeturn.app.ui.components.SettingsBackButton
 import com.freeturn.app.ui.components.SettingsContentMaxWidth
@@ -60,6 +61,7 @@ fun FreeTurnXFeaturesScreen(
     onBack: () -> Unit
 ) {
     val shizukuTetherEnabled by settingsViewModel.shizukuTetherEnabled.collectAsStateWithLifecycle()
+    val hotspotProxyEnabled by settingsViewModel.hotspotProxyEnabled.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
@@ -92,6 +94,7 @@ fun FreeTurnXFeaturesScreen(
                     onEnabledChange = { settingsViewModel.setShizukuTetherEnabled(it) },
                 )
                 Socks5ClientCard()
+                if (hotspotProxyEnabled) HotspotQrCard(loadConfig = settingsViewModel::hotspotConfig)
             }
         }
     }
