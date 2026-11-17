@@ -77,6 +77,8 @@ class Socks5ClientService : VpnService(), KoinComponent {
 
     @Synchronized
     private fun start(config: Socks5ClientConfig): String? {
+        // До VPN: прокси должен отвечать по SOCKS5, иначе честная ошибка, а не «Подключено» без интернета.
+        Socks5Probe.check(config)?.let { return it }
         stopHelper()
         tun?.close()
         val established = Builder()

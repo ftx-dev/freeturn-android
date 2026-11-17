@@ -26,7 +26,6 @@ import com.freeturn.app.ui.theme.Spacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.Inet4Address
-import java.net.NetworkInterface
 
 /**
  * FreeTurnX: QR для SOCKS5 Hotspot - второй телефон сканирует его в SOCKS5-клиенте.
@@ -34,6 +33,7 @@ import java.net.NetworkInterface
  */
 @Composable
 fun HotspotQrCard(loadConfig: suspend () -> Socks5Config) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     var open by rememberSaveable { mutableStateOf(false) }
     SettingsCard {
         SettingsEntryRow(
@@ -46,7 +46,7 @@ fun HotspotQrCard(loadConfig: suspend () -> Socks5Config) {
     if (!open) return
     val url by produceState<String?>(null) {
         val cfg = loadConfig()
-        value = withContext(Dispatchers.IO) { hotspotAddress() }
+        value = withContext(Dispatchers.IO) { hotspotAddress(context) }
             ?.let { Socks5ClientConfig(it, cfg.port, cfg.user, cfg.pass).proxyUrl }.orEmpty()
     }
     // Без кнопок: закрывается касанием вне окна или «Назад».
@@ -75,17 +75,17 @@ fun HotspotQrCard(loadConfig: suspend () -> Socks5Config) {
 }
 
 /**
- * Адрес телефона в сети его точки доступа. Интерфейсы точки доступа (ap0, swlan0, softap0,
- * wlan1...) - первыми; мобильный интернет, туннели и loopback не подходят.
+ * Адрес телефона в Wi-Fi сети, к которой он подключён: SOCKS5 Hotspot обслуживает устройства
+ * этой же сети. Клиенты точки доступа самого телефона до него не достают (ответы уходят в VPN) -
+ * для них есть раздача через Shizuku.
  */
-internal fun hotspotAddress(): String? {
-    val skip = listOf("lo", "tun", "rmnet", "ccmni", "dummy", "v4-", "ip6", "p2p", "test")
-    val preferred = listOf("ap", "swlan", "softap", "wlan1", "wigig")
-    val candidates = runCatching { NetworkInterface.getNetworkInterfaces()?.toList().orEmpty() }.getOrDefault(emptyList())
-        .filter { it.isUp && !it.isLoopback && skip.none(it.name::startsWith) }
-        .flatMap { iface ->
-            iface.inetAddresses.toList().filterIsInstance<Inet4Address>()
-                .filter { it.isSiteLocalAddress }.map { iface.name to it.hostAddress.orEmpty() }
-        }
-    return (candidates.firstOrNull { (name, _) -> preferred.any(name::startsWith) } ?: candidates.firstOrNull())?.second
+internal fun hotspotAddress(context: android.content.Context): String? {
+    val cm = context.getSystemService(android.net.ConnectivityManager::class.java) ?: return null
+    @Suppress("DEPRECATION")
+    return cm.allNetworks
+        .filter { cm.getNetworkCapabilities(it)?.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) == true }
+        .flatMap { cm.getLinkProperties(it)?.linkAddresses.orEmpty() }
+        .map { it.address }
+        .firstOrNull { it is Inet4Address && it.isSiteLocalAddress }
+        ?.hostAddress
 }
