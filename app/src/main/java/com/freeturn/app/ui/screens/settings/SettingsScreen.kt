@@ -46,7 +46,8 @@ fun SettingsScreen(
     onOpenServers: () -> Unit,
     onOpenApp: () -> Unit,
     onOpenAdvanced: () -> Unit,
-    onOpenAbout: () -> Unit
+    onOpenAbout: () -> Unit,
+    onOpenFeatures: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
@@ -108,6 +109,7 @@ fun SettingsScreen(
                         )
                     }
                 }
+                FreeTurnXFeaturesEntry(onOpenFeatures)
             }
         }
     }
@@ -124,7 +126,6 @@ fun AdvancedScreen(
     val manualCaptcha by settingsViewModel.manualCaptcha.collectAsStateWithLifecycle()
     val restartServerOnSwitch by settingsViewModel.restartServerOnSwitch.collectAsStateWithLifecycle()
     val hotspotProxyEnabled by settingsViewModel.hotspotProxyEnabled.collectAsStateWithLifecycle()
-    val shizukuTetherEnabled by settingsViewModel.shizukuTetherEnabled.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
@@ -188,11 +189,6 @@ fun AdvancedScreen(
                 if (hotspotProxyEnabled) {
                     HotspotOptionsCard(settingsViewModel)
                 }
-
-                ShizukuTetherCard(
-                    enabled = shizukuTetherEnabled,
-                    onEnabledChange = { settingsViewModel.setShizukuTetherEnabled(it) },
-                )
 
                 SettingsCard {
                     SettingsSwitchRow(

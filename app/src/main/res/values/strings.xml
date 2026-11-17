@@ -3,7 +3,7 @@
 
     <!-- HomeScreen -->
     <string name="nav_home">Главная</string>
-    <string name="turn_proxy_title" translatable="false">Free Turn</string>
+    <string name="turn_proxy_title" translatable="false">FreeTurnX</string>
     <string name="proxy_active">Прокси активен</string>
     <string name="tunnel_active">Туннель активен</string>
     <string name="proxy_connecting">Подключение…</string>
@@ -334,7 +334,7 @@
     <string name="language_en" translatable="false">English</string>
 
     <!-- Notifications -->
-    <string name="notif_proxy_title" translatable="false">FreeTurn</string>
+    <string name="notif_proxy_title" translatable="false">FreeTurnX</string>
     <string name="notif_proxy_connecting">Подключение…</string>
     <string name="notif_channel_proxy">Прокси</string>
     <string name="notif_channel_captcha">Капча</string>
@@ -378,7 +378,7 @@
     <string name="tile_service_label" translatable="false">Free Turn</string>
 
     <!-- Виджет домашнего экрана -->
-    <string name="widget_label">FreeTurn - прокси</string>
+    <string name="widget_label">FreeTurnX - прокси</string>
     <string name="widget_status_on">Подключено</string>
     <string name="widget_status_connecting">Подключение…</string>
     <string name="widget_status_off">Отключено</string>
@@ -421,6 +421,8 @@
     <string name="nerd_mode">Режим отладки</string>
     <string name="nerd_mode_desc">Открывает отладочную информацию: состояние ядра, журнал сервера и подробные логи</string>
     <string name="hotspot_proxy" translatable="false">SOCKS5 Hotspot</string>
+    <string name="freeturnx_features">FreeTurnX: Фичи</string>
+    <string name="freeturnx_features_desc">Собственные функции FreeTurnX</string>
     <string name="shizuku_tether">Раздача через Shizuku</string>
     <string name="shizuku_tether_desc">Точка доступа раздаёт VPN, без root. Требуется приложение Shizuku</string>
     <string name="shizuku_tether_not_running">Запустите Shizuku</string>

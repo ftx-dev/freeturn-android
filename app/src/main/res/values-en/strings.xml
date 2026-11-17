@@ -349,7 +349,7 @@
     <string name="notif_proxy_threads_format">Threads: %1$d/%2$d</string>
 
     <!-- Виджет домашнего экрана -->
-    <string name="widget_label">FreeTurn - proxy</string>
+    <string name="widget_label">FreeTurnX - proxy</string>
     <string name="widget_status_on">Connected</string>
     <string name="widget_status_connecting">Connecting…</string>
     <string name="widget_status_off">Disconnected</string>
@@ -391,6 +391,8 @@
     <string name="settings_advanced_desc">Debugging and diagnostics</string>
     <string name="nerd_mode">Debug mode</string>
     <string name="nerd_mode_desc">Shows debug info: core state, server journal and verbose logs</string>
+    <string name="freeturnx_features">FreeTurnX: Features</string>
+    <string name="freeturnx_features_desc">FreeTurnX-only features</string>
     <string name="shizuku_tether">Hotspot via Shizuku</string>
     <string name="shizuku_tether_desc">Hotspot shares the VPN, no root. Requires the Shizuku app</string>
     <string name="shizuku_tether_not_running">Start Shizuku</string>

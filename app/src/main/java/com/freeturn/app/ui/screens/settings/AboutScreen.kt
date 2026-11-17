@@ -95,10 +95,10 @@ fun AboutScreen(onBack: () -> Unit) {
                         SettingsEntryRow(
                             iconRes = R.drawable.code_24px,
                             title = stringResource(R.string.android_client),
-                            subtitle = "hackdiaz-dev/turn-proxy-android",
+                            subtitle = "ftx-dev/freeturn-android",
                             trailingRes = R.drawable.open_in_new_24px,
                             trailingTint = MaterialTheme.colorScheme.primary,
-                            onClick = { open("https://github.com/hackdiaz-dev/turn-proxy-android") }
+                            onClick = { open("https://github.com/ftx-dev/freeturn-android") }
                         )
                     }
                     SettingsGroupItem(1, 3) {

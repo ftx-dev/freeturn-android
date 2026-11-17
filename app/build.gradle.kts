@@ -29,6 +29,11 @@ android {
         versionCode = versionName!!.split(".").let { (ma, mi, pa) ->
             ma.toInt() * 10000 + mi.toInt() * 100 + pa.toInt()
         }
+        // FreeTurnX: версия "<наша>-<родителя>", например 0.1-5.3.4. Строку родителя выше не трогаем,
+        // чтобы его обновления вливались без конфликтов. Код растёт и с нашей версией, и с родительской.
+        val fx = providers.gradleProperty("freeturnxVersion").get()
+        versionCode = fx.split(".").let { (ma, mi) -> ma.toInt() * 100 + mi.toInt() } * 1_000_000 + versionCode!!
+        versionName = "$fx-$versionName"
     }
 
     splits {
@@ -69,10 +74,10 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            resValue("string", "app_name", "FreeTurn Debug")
+            resValue("string", "app_name", "FreeTurnX Debug")
         }
         release {
-            resValue("string", "app_name", "FreeTurn")
+            resValue("string", "app_name", "FreeTurnX")
             signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true

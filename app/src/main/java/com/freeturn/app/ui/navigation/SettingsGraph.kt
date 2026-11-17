@@ -12,6 +12,7 @@ import com.freeturn.app.ui.screens.serverdetail.ServerDetailScreen
 import com.freeturn.app.ui.screens.settings.AboutScreen
 import com.freeturn.app.ui.screens.settings.AdvancedScreen
 import com.freeturn.app.ui.screens.settings.AppScreen
+import com.freeturn.app.ui.screens.settings.FreeTurnXFeaturesScreen
 import com.freeturn.app.ui.screens.settings.NerdScreen
 import com.freeturn.app.ui.screens.settings.ServersListScreen
 import com.freeturn.app.ui.screens.settings.SettingsScreen
@@ -35,7 +36,15 @@ internal fun NavGraphBuilder.settingsGraph(
                 onOpenServers = { navController.navigate(ServersList) },
                 onOpenApp = { navController.navigate(AppSettings) },
                 onOpenAdvanced = { navController.navigate(Advanced) },
-                onOpenAbout = { navController.navigate(About) }
+                onOpenAbout = { navController.navigate(About) },
+                onOpenFeatures = { navController.navigate(FreeTurnXFeatures) }
+            )
+        }
+
+        composable<FreeTurnXFeatures> {
+            FreeTurnXFeaturesScreen(
+                settingsViewModel = settingsViewModel,
+                onBack = { navController.popBackStack() }
             )
         }
 
