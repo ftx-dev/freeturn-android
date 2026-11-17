@@ -8,6 +8,7 @@ import com.freeturn.app.data.config.TunnelTransport
 import com.freeturn.app.data.config.splitTunnelRule
 import com.freeturn.app.data.isPackageInstalled
 import com.freeturn.app.domain.proxy.TunnelSetup
+import com.freeturn.app.freeturnx.excludeLocalSubnets
 
 /**
  * Переносит параметры из WG-конфига и split-tunnel в билдер tun-интерфейса.
@@ -36,6 +37,7 @@ fun VpnService.Builder.applyTunnel(
         addRoute(ip, prefix)
     }
     setup.dns.forEach { addDnsServer(it) }
+    if (hotspot) excludeLocalSubnets(context) // FreeTurnX: раздача доступна из локальной сети
 
     val rule = splitTunnelRule(
         mode = cfg.splitTunnelMode,
