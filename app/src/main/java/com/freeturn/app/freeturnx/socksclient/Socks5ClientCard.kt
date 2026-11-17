@@ -41,6 +41,7 @@ fun Socks5ClientCard() {
     val vpnBusy = proxy.busy && !Socks5ClientService.isActive
     var dialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val requestLan = com.freeturn.app.freeturnx.rememberLocalNetworkRequest()
     // Запрос разрешения VPN - здесь, а не в окне: окно закрывается раньше, чем придёт ответ.
     val vpnPermission = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) Socks5ClientService.start(context)
@@ -64,8 +65,11 @@ fun Socks5ClientCard() {
     if (dialog) Socks5ClientDialog(
         state,
         onConnect = {
-            val prepare = VpnService.prepare(context)
-            if (prepare != null) vpnPermission.launch(prepare) else Socks5ClientService.start(context)
+            // Прокси - в локальной сети: на Android 17+ сначала разрешение на неё.
+            requestLan {
+                val prepare = VpnService.prepare(context)
+                if (prepare != null) vpnPermission.launch(prepare) else Socks5ClientService.start(context)
+            }
         },
         onDismiss = { dialog = false }
     )

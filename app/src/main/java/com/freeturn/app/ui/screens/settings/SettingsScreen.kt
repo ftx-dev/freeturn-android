@@ -126,6 +126,8 @@ fun AdvancedScreen(
     val manualCaptcha by settingsViewModel.manualCaptcha.collectAsStateWithLifecycle()
     val restartServerOnSwitch by settingsViewModel.restartServerOnSwitch.collectAsStateWithLifecycle()
     val hotspotProxyEnabled by settingsViewModel.hotspotProxyEnabled.collectAsStateWithLifecycle()
+    val requestLan = com.freeturn.app.freeturnx.rememberLocalNetworkRequest()
+    androidx.compose.runtime.LaunchedEffect(hotspotProxyEnabled) { if (hotspotProxyEnabled) requestLan {} }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
@@ -183,7 +185,11 @@ fun AdvancedScreen(
                         subtitle = stringResource(R.string.hotspot_proxy_desc),
                         iconRes = R.drawable.wifi_tethering_24px,
                         checked = hotspotProxyEnabled,
-                        onCheckedChange = { settingsViewModel.setHotspotProxyEnabled(it) }
+                        onCheckedChange = { on ->
+                            // FreeTurnX: Android 17+ - без разрешения на локальную сеть раздача недоступна.
+                            if (on) requestLan { settingsViewModel.setHotspotProxyEnabled(true) }
+                            else settingsViewModel.setHotspotProxyEnabled(false)
+                        }
                     )
                 }
                 if (hotspotProxyEnabled) {
