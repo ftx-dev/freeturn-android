@@ -20,7 +20,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.freeturn.app"
+        applicationId = "com.freeturnx.app" // FreeTurnX: свой пакет, рядом с FreeTurn
         // gomobile собирает ядро с -androidapi 24.
         minSdk = 24
         targetSdk = 37
