@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue)
 </div>
 
-![FreeTurnX для Android: раздача Wi-Fi через Shizuku, SOCKS5-клиент и всё из FreeTurn](freeturnx-banner.png)
+![FreeTurnX для Android: Hotspot под VPN через Shizuku и SOCKS5-клиент](freeturnx-banner.png)
 
 **FreeTurnX** - Android-клиент на основе [FreeTurn](https://github.com/hackdiaz-dev/turn-proxy-android). В нём есть всё, что умеет FreeTurn, плюс собственные функции в разделе настроек **«FreeTurnX: Фичи»**. Обновления FreeTurn регулярно вливаются в FreeTurnX.
 
@@ -15,7 +15,7 @@
 
 ## Фичи FreeTurnX
 
-- **Раздача Wi-Fi через Shizuku.** Точка доступа раздаёт VPN без root: подключённые устройства выходят в интернет через туннель, на них ничего настраивать не нужно. Включается вместе с VPN. Нужны Android 13+ и запущенное приложение [Shizuku](https://shizuku.rikka.app/).
+- **Hotspot под VPN через Shizuku.** Точка доступа раздаёт VPN без root: подключённые устройства выходят в интернет через туннель, на них ничего настраивать не нужно. Включается вместе с VPN. Нужны Android 13+ и запущенное приложение [Shizuku](https://shizuku.rikka.app/).
 - **SOCKS5-клиент.** Подключает телефон к SOCKS5-прокси - например, к SOCKS5 Hotspot другого телефона с FreeTurn или FreeTurnX, к чьему Wi-Fi вы подключены. Адрес подставляется из шлюза Wi-Fi, порт по умолчанию 1080. На раздающем телефоне включите UDP в SOCKS5 Hotspot, иначе не будет работать DNS. Пока клиент работает, основной VPN выключен: Android держит только один VPN.
 
 ## Возможности FreeTurn
