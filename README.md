@@ -1,5 +1,6 @@
 <div align="center">
 
+[![Release](https://img.shields.io/github/v/release/ftx-dev/freeturn-android?label=FreeTurnX&logo=github)](https://github.com/ftx-dev/freeturn-android/releases/latest)
 [![Core](https://img.shields.io/badge/Core-free--turn--proxy-blue?logo=github&logoColor=white)](https://github.com/hackdiaz-dev/free-turn-proxy)
 ![Android](https://img.shields.io/badge/Android-7.0%2B-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-Compose-7F52FF?logo=kotlin&logoColor=white)
@@ -7,7 +8,16 @@
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue)
 </div>
 
-![FreeTurn для Android: подключение, серверы, раздельное туннелирование и настройка](banner.png)
+![FreeTurnX для Android: подключение, серверы, раздельное туннелирование и настройка](freeturnx-banner.png)
+
+**FreeTurnX** - клиент на основе [FreeTurn для Android](https://github.com/hackdiaz-dev/turn-proxy-android): всё из оригинала плюс собственные функции в разделе настроек **«FreeTurnX: Фичи»**. Обновления оригинала регулярно вливаются в FreeTurnX.
+
+Версия `0.1-5.3.4` означает: FreeTurnX `0.1` на основе FreeTurn `5.3.4`. Приложение обновляется из [релизов FreeTurnX](https://github.com/ftx-dev/freeturn-android/releases). FreeTurnX подписан своим ключом, поэтому поверх FreeTurn не ставится: сначала удалите FreeTurn (сохраните параметры подключения или сделайте бэкап).
+
+### Фичи FreeTurnX
+
+- **Раздача через Shizuku** - точка доступа Wi-Fi раздаёт VPN без root, на подключённых устройствах ничего настраивать не нужно. Нужны Android 13+ и приложение [Shizuku](https://shizuku.rikka.app/).
+- **SOCKS5-клиент** - подключает телефон к SOCKS5-прокси: например, к SOCKS5 Hotspot другого телефона с FreeTurn, к чьему Wi-Fi вы подключены. Адрес подставляется из шлюза Wi-Fi; на раздающем телефоне включите UDP в SOCKS5 Hotspot.
 
 > **Disclaimer.** Проект предназначен **исключительно для образовательных и исследовательских целей.**
 
