@@ -1,0 +1,63 @@
+# FreeTurnX: релизы форка. Тег v<наша>-<родителя> (например v0.1-5.3.4) -> подписанные APK в GitHub Release.
+# Workflow родителя (release.yml, release-please.yml) в форке отключены, файлы не трогаем -
+# так его обновления вливаются без конфликтов.
+name: FreeTurnX Release
+
+on:
+  push:
+    tags:
+      - 'v*.*-*.*.*'
+
+permissions:
+  contents: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Check tag matches app version
+        run: |
+          FX=$(grep '^freeturnxVersion=' gradle.properties | cut -d= -f2)
+          UP=$(grep -o 'versionName = "[0-9.]*"' app/build.gradle.kts | head -1 | grep -o '[0-9.]*')
+          test "v$FX-$UP" = "$GITHUB_REF_NAME" || { echo "тег $GITHUB_REF_NAME, а версия приложения v$FX-$UP"; exit 1; }
+
+      - name: Restore release keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
+          cat > keystore.properties <<PROPS
+          storeFile=$RUNNER_TEMP/release.jks
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          PROPS
+
+      - name: Assemble release APKs
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease
+
+      # Имя ассета обязано содержать ABI - AppUpdater выбирает APK по Build.SUPPORTED_ABIS
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          mkdir -p dist
+          for abi in arm64-v8a armeabi-v7a; do
+            cp "app/build/outputs/apk/release/app-${abi}-release.apk" "dist/freeturnx-${VERSION}-${abi}.apk"
+          done
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || \
+            gh release create "$GITHUB_REF_NAME" --title "FreeTurnX $VERSION" --generate-notes
+          gh release upload "$GITHUB_REF_NAME" dist/*.apk --clobber

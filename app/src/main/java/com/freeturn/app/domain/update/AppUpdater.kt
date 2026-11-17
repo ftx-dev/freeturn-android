@@ -218,17 +218,28 @@ class AppUpdater(private val context: Context) {
 
     companion object {
         private const val RELEASES_URL =
-            "https://api.github.com/repos/hackdiaz-dev/turn-proxy-android/releases/latest"
+            "https://api.github.com/repos/ftx-dev/freeturn-android/releases/latest"
 
+        // FreeTurnX: версии вида "0.1-5.3.4" - сначала наша часть, затем версия родителя;
+        // нечисловые хвосты вроде "-debug" не учитываются.
         fun isNewer(remote: String, current: String): Boolean {
-            val r = remote.split(".").map { it.toIntOrNull() ?: 0 }
-            val c = current.split(".").map { it.toIntOrNull() ?: 0 }
+            val r = versionParts(remote)
+            val c = versionParts(current)
             for (i in 0 until maxOf(r.size, c.size)) {
-                val rv = r.getOrElse(i) { 0 }
-                val cv = c.getOrElse(i) { 0 }
-                if (rv != cv) return rv > cv
+                val rg = r.getOrElse(i) { emptyList() }
+                val cg = c.getOrElse(i) { emptyList() }
+                for (j in 0 until maxOf(rg.size, cg.size)) {
+                    val rv = rg.getOrElse(j) { 0 }
+                    val cv = cg.getOrElse(j) { 0 }
+                    if (rv != cv) return rv > cv
+                }
             }
             return false
         }
+
+        private fun versionParts(version: String): List<List<Int>> =
+            version.removePrefix("v").split("-").mapNotNull { group ->
+                group.split(".").map { it.toIntOrNull() ?: return@mapNotNull null }
+            }
     }
 }
