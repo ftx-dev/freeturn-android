@@ -51,6 +51,8 @@ class Socks5Server(
     private val bindAddress: String = BIND_ADDRESS,
     // Лишние соединения сверх лимита закрываются сразу.
     private val maxClients: Int = MAX_CLIENTS,
+    // FreeTurnX: хук после создания слушающего сокета (защита от VPN, см. freeturnx/LocalSubnets).
+    private val onListen: (ServerSocket) -> Unit = {},
 ) {
     private val port = config.port
     private val modeLabel: String
@@ -80,6 +82,7 @@ class Socks5Server(
             return
         }
         serverSocket = socket
+        onListen(socket)
         scope.launch { acceptLoop(socket) }
         log.add("SOCKS5: раздача туннеля на $bindAddress:$port ($modeLabel)")
     }
