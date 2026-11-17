@@ -25,3 +25,9 @@
 -dontwarn com.google.errorprone.annotations.RestrictedApi
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.concurrent.GuardedBy
+
+# ── FreeTurnX: Shizuku ────────────────────────────────────────────────────────
+# Сервис раздачи создаёт процесс Shizuku через рефлексию (конструктор по имени класса):
+# без keep R8 вырезал конструкторы и методы, и сервис «не подключался» в release.
+-keep class com.freeturn.app.tether.TetherUserService { *; }
+-keep class com.freeturn.app.tether.ITetherService** { *; }
