@@ -423,6 +423,13 @@
     <string name="hotspot_proxy" translatable="false">SOCKS5 Hotspot</string>
     <string name="freeturnx_features">FreeTurnX: Фичи</string>
     <string name="freeturnx_features_desc">Собственные функции FreeTurnX</string>
+    <string name="fx_socks_client_vpn_busy">Недоступен, пока работает VPN</string>
+    <string name="fx_socks_client_scan">Сканировать QR</string>
+    <string name="fx_socks_client_scan_hint">Наведите камеру на QR SOCKS5 Hotspot на другом телефоне</string>
+    <string name="fx_hotspot_qr">QR для SOCKS5 Hotspot</string>
+    <string name="fx_hotspot_qr_desc">Второй телефон сканирует его в SOCKS5-клиенте</string>
+    <string name="fx_hotspot_qr_no_ap">Не найден адрес точки доступа. Включите точку доступа и откройте снова.</string>
+    <string name="fx_tile_hotspot">Hotspot под VPN</string>
     <string name="fx_socks_client">SOCKS5-клиент</string>
     <string name="fx_socks_client_desc">Подключить телефон к SOCKS5-прокси, например к раздаче FreeTurn по Wi-Fi</string>
     <string name="fx_socks_client_hint">Подключитесь к Wi-Fi телефона, где в FreeTurn включён SOCKS5 Hotspot (с UDP). Адрес подставлен из шлюза Wi-Fi. Пока клиент работает, основной VPN отключён.</string>

@@ -393,6 +393,13 @@
     <string name="nerd_mode_desc">Shows debug info: core state, server journal and verbose logs</string>
     <string name="freeturnx_features">FreeTurnX: Features</string>
     <string name="freeturnx_features_desc">FreeTurnX-only features</string>
+    <string name="fx_socks_client_vpn_busy">Unavailable while the VPN is on</string>
+    <string name="fx_socks_client_scan">Scan QR</string>
+    <string name="fx_socks_client_scan_hint">Point the camera at the SOCKS5 Hotspot QR on another phone</string>
+    <string name="fx_hotspot_qr">SOCKS5 Hotspot QR</string>
+    <string name="fx_hotspot_qr_desc">Scan it in the SOCKS5 client on another phone</string>
+    <string name="fx_hotspot_qr_no_ap">Hotspot address not found. Turn the hotspot on and open again.</string>
+    <string name="fx_tile_hotspot">Hotspot via VPN</string>
     <string name="fx_socks_client">SOCKS5 client</string>
     <string name="fx_socks_client_desc">Route this phone through a SOCKS5 proxy, e.g. FreeTurn sharing over Wi-Fi</string>
     <string name="fx_socks_client_hint">Join the Wi-Fi of a phone with SOCKS5 Hotspot (with UDP) enabled in FreeTurn. The address is prefilled from the Wi-Fi gateway. The main VPN is off while the client runs.</string>

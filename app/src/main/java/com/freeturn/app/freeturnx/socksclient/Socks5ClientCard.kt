@@ -26,6 +26,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.freeturn.app.R
+import com.freeturn.app.domain.proxy.ProxyStore
+import org.koin.compose.koinInject
 import com.freeturn.app.ui.components.SettingsCard
 import com.freeturn.app.ui.components.SettingsEntryRow
 import com.freeturn.app.ui.theme.Spacing
@@ -34,6 +36,9 @@ import com.freeturn.app.ui.theme.Spacing
 @Composable
 fun Socks5ClientCard() {
     val state by Socks5ClientService.state.collectAsStateWithLifecycle()
+    val proxy by koinInject<ProxyStore>().status.collectAsStateWithLifecycle()
+    // VPN FreeTurn работает (а не наш SOCKS5-клиент) - подключаться нельзя.
+    val vpnBusy = proxy.busy && !Socks5ClientService.isActive
     var dialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     // Запрос разрешения VPN - здесь, а не в окне: окно закрывается раньше, чем придёт ответ.
@@ -48,8 +53,11 @@ fun Socks5ClientCard() {
                 is Socks5ClientService.State.Connected -> stringResource(R.string.fx_socks_client_connected, s.proxy)
                 Socks5ClientService.State.Connecting -> stringResource(R.string.fx_socks_client_connecting)
                 is Socks5ClientService.State.Failed -> stringResource(R.string.fx_socks_client_failed, s.reason)
-                Socks5ClientService.State.Idle -> stringResource(R.string.fx_socks_client_desc)
+                Socks5ClientService.State.Idle ->
+                    if (vpnBusy) stringResource(R.string.fx_socks_client_vpn_busy)
+                    else stringResource(R.string.fx_socks_client_desc)
             },
+            enabled = !vpnBusy || Socks5ClientService.isActive,
             onClick = { dialog = true }
         )
     }
@@ -71,6 +79,14 @@ private fun Socks5ClientDialog(state: Socks5ClientService.State, onConnect: () -
     var port by rememberSaveable { mutableStateOf(saved.port.toString()) }
     var user by rememberSaveable { mutableStateOf(saved.user) }
     var pass by rememberSaveable { mutableStateOf(saved.pass) }
+    var scanning by rememberSaveable { mutableStateOf(false) }
+    if (scanning) QrScanDialog(
+        onResult = {
+            host = it.host; port = it.port.toString(); user = it.user; pass = it.pass
+            scanning = false
+        },
+        onDismiss = { scanning = false }
+    )
     val active = state is Socks5ClientService.State.Connected || state is Socks5ClientService.State.Connecting
     val portNumber = port.toIntOrNull()?.takeIf { it in 1..65535 }
 
@@ -129,6 +145,9 @@ private fun Socks5ClientDialog(state: Socks5ClientService.State, onConnect: () -
             }
         },
         dismissButton = {
+            if (!active) {
+                TextButton(onClick = { scanning = true }) { Text(stringResource(R.string.fx_socks_client_scan)) }
+            }
             TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.cancel)) }
         }
     )

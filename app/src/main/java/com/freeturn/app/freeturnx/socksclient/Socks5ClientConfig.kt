@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import java.net.Inet4Address
+import java.net.URI
+import java.net.URLDecoder
 import java.net.URLEncoder
 
 /** FreeTurnX: адрес SOCKS5 для [Socks5ClientService]; хранится отдельно от настроек родителя. */
@@ -52,6 +54,17 @@ data class Socks5ClientConfig(
                 ?.firstOrNull { it.isDefaultRoute && it.gateway is Inet4Address }
                 ?.gateway?.hostAddress
         }
+
+        /** Разбор `socks5://[логин:пароль@]адрес[:порт]` - так его отдаёт QR SOCKS5 Hotspot. null - не SOCKS5. */
+        fun parseUrl(raw: String): Socks5ClientConfig? = runCatching {
+            val uri = URI(raw.trim())
+            if (uri.scheme?.lowercase() !in setOf("socks5", "socks", "socks5h")) return null
+            val host = uri.host?.takeIf { it.isNotBlank() } ?: return null
+            val (user, pass) = uri.rawUserInfo?.split(":", limit = 2)
+                ?.map { URLDecoder.decode(it, "UTF-8") }
+                ?.let { it[0] to it.getOrElse(1) { "" } } ?: ("" to "")
+            Socks5ClientConfig(host, if (uri.port in 1..65535) uri.port else DEFAULT_PORT, user, pass)
+        }.getOrNull()
 
         private fun enc(s: String) = URLEncoder.encode(s, "UTF-8")
         private fun prefs(context: Context) = context.getSharedPreferences("freeturnx_socks5_client", Context.MODE_PRIVATE)

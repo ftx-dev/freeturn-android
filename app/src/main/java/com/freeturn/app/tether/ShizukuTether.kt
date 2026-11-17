@@ -52,7 +52,8 @@ object ShizukuTether {
 
     private val serviceArgs by lazy {
         Shizuku.UserServiceArgs(ComponentName(BuildConfig.APPLICATION_ID, TetherUserService::class.java.name))
-            .daemon(false)
+            // daemon: сервис переживает смерть приложения, чтобы успеть выключить раздачу (kill switch).
+            .daemon(true)
             .processNameSuffix("tether")
             .debuggable(BuildConfig.DEBUG)
             .version(BuildConfig.VERSION_CODE)
@@ -78,6 +79,7 @@ object ShizukuTether {
         val helper = File(context.applicationInfo.nativeLibraryDir, HELPER_NAME)
         if (!helper.isFile) return@withContext "нет $HELPER_NAME в ${helper.parent}"
         val tether = bind() ?: return@withContext "сервис Shizuku не подключился"
+        runCatching { tether.watchClient(clientToken) }
         val steps = mutableListOf<String>()
         val error = runCatching {
             tether.start(helper.path, "socks5://127.0.0.1:$proxyPort", dnsServers.toTypedArray(), mtu, startHotspot, steps)
@@ -120,6 +122,9 @@ object ShizukuTether {
         Shizuku.bindUserService(serviceArgs, conn)
         return withTimeoutOrNull(BIND_TIMEOUT_MS) { ready.await() }
     }
+
+    /** Живёт, пока жив процесс приложения: по его смерти сервис Shizuku выключает раздачу. */
+    private val clientToken = android.os.Binder()
 
     private const val PERMISSION_REQUEST = 4207
     private const val BIND_TIMEOUT_MS = 10_000L

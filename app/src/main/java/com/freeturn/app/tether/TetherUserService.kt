@@ -123,6 +123,21 @@ class TetherUserService() : ITetherService.Stub() {
         }
     }
 
+    private var watched: android.os.IBinder? = null
+    private val clientDeath = android.os.IBinder.DeathRecipient {
+        android.util.Log.w("FreeTurnTether", "приложение умерло - kill switch: раздача выключается")
+        synchronized(this) { stopLocked(stopHotspot = true, log = mutableListOf()) }
+        exitProcess(0)
+    }
+
+    override fun watchClient(client: android.os.IBinder) {
+        synchronized(this) {
+            watched?.let { runCatching { it.unlinkToDeath(clientDeath, 0) } }
+            runCatching { client.linkToDeath(clientDeath, 0) }.onFailure { clientDeath.binderDied() }
+            watched = client
+        }
+    }
+
     override fun stop(stopHotspot: Boolean, log: MutableList<String>) {
         synchronized(this) { stopLocked(stopHotspot, log) }
     }

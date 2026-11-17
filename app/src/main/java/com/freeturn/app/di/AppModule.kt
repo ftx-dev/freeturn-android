@@ -11,6 +11,7 @@ import com.freeturn.app.domain.proxy.ProxyOrchestrator
 import com.freeturn.app.domain.proxy.ProxyServiceLauncher
 import com.freeturn.app.domain.proxy.ProxyStore
 import com.freeturn.app.service.AndroidProxyServiceLauncher
+import com.freeturn.app.freeturnx.FreeTurnXLauncher
 import com.freeturn.app.domain.ssh.SSHManager
 import com.freeturn.app.domain.server.ServerSetupRepository
 import com.freeturn.app.domain.share.ShareRepository
@@ -35,7 +36,7 @@ val appModule = module {
     single { ProxyStore() }
     single { PingMeter(androidContext()) }
     single { ProxyLog(File(androidContext().filesDir, "logs")) }
-    single<ProxyServiceLauncher> { AndroidProxyServiceLauncher(androidContext(), get(), get()) }
+    single<ProxyServiceLauncher> { FreeTurnXLauncher(androidContext(), AndroidProxyServiceLauncher(androidContext(), get(), get())) }
     // Ядро одно на процесс: сессия переживает пересоздание сервиса.
     // noBackupFilesDir: состояние ядра приватное и не должно уезжать в облачный бэкап.
     single { ProxyEngine(androidContext().noBackupFilesDir.absolutePath, get(), get()) }
